@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brain Bubbles on Scroll</title>
+<style>
+  body{margin:0;padding:0;overflow-x:hidden;font-family:Arial, sans-serif;}
+  .content{height:2000px;background:linear-gradient(#fff,#ddd);padding:20px;}
+
+  @keyframes bubbleRise{
+    0%   {opacity:0;transform:translateX(var(--drift,0)) translateY(0) scale(.7);}
+    15%  {opacity:1;}
+    100% {opacity:0;transform:translateX(var(--drift,0)) translateY(-110vh) scale(1);}
+  }
+
+  .brain-bubble{
+    position:fixed;
+    left:var(--x,0);
+    bottom:-120px;
+    width:var(--size,80px);
+    height:var(--size,80px);
+    background:url('brain.png') center/contain no-repeat;
+    pointer-events:none;
+    animation:bubbleRise 4s cubic-bezier(.55,.05,.45,.95) forwards;
+  }
+</style>
+</head>
+<body>
+  <div class="content">
+    <h1>Brain Visualization App</h1>
+    <p>Scroll down to see brain bubbles drift up!</p>
+  </div>
+
+<script>
+  /* ---- tweakables ---- */
+  const SPAWN_DELAY = 50;     // ← faster!
+  const BUBBLES_PER_EVENT = 3;
+  const ANIM_TIME   = 4000;
+  const SIZE_MIN    = 60;
+  const SIZE_MAX    = 100;
+  const SIDE_MARGIN = 40;
+
+  let lastSpawn = 0;
+
+  window.addEventListener('scroll', () => {
+    const now = Date.now();
+    if (now - lastSpawn < SPAWN_DELAY) return;
+    lastSpawn = now;
+    for (let i = 0; i < BUBBLES_PER_EVENT; i++) spawnBubble();
+  });
+
+  function spawnBubble(){
+    const size   = SIZE_MIN + Math.random() * (SIZE_MAX - SIZE_MIN);
+    const drift  = (Math.random() - 0.5) * 80;   // ±40 px
+    const xPos   = Math.random() * (innerWidth - size - 2*SIDE_MARGIN) + SIDE_MARGIN;
+
+    const bubble = document.createElement('div');
+    bubble.className = 'brain-bubble';
+    bubble.style.setProperty('--size',  size  + 'px');
+    bubble.style.setProperty('--x',     xPos  + 'px');
+    bubble.style.setProperty('--drift', drift + 'px');
+
+    document.body.appendChild(bubble);
+    setTimeout(() => bubble.remove(), ANIM_TIME);
+  }
+</script>
+</body>
+</html>
