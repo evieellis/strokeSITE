@@ -3,8 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Stroke Cluster Visualization</title>
-  <link rel="stylesheet" href="styles.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- BRAIN ANIMATION -->
+  <style>
+    /* BRAIN rise */
+    @keyframes bubbleRise {
+      0%   { opacity: 0; transform: translateX(var(--drift,0)) translateY(0) scale(.7); }
+      15%  { opacity: 1; }
+      100% { opacity: 0; transform: translateX(var(--drift,0)) translateY(-110vh) scale(1); }
+    }
+    /* BRAIN sprite */
+    .brain-bubble {
+      position: fixed;
+      left: var(--x,0);
+      bottom: -120px;
+      width: var(--size,80px);
+      height: var(--size,80px);
+      background: url('./brain.png') center/contain no-repeat;
+      pointer-events: none;
+      animation: bubbleRise 4s cubic-bezier(.55,.05,.45,.95) forwards;
+      z-index: 0;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -12,43 +34,132 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
-        <li><a href="bubbleAttempt.html">Bubbles</a></li>
-        <li><a href="https://github.com/SCCapstone/CostcoBOOMers.git" target="_blank">Check Out Our Repo!</a></li>
+        <li><a href="https://github.com/SCCapstone/CostcoBOOMers.git" target="_blank">GitHub Repo</a></li>
+        <li><a href="https://strokecluster-visualization.onrender.com/" target="_blank">Live Website</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
-    <!-- Hero Section with Video -->
     <section id="hero">
-      <h1>Stroke Clutser Visualization</h1>
-      <p>Are you ready to take your brain research up a notch?</p>
+      <h1>Stroke Cluster Visualization</h1>
+      <p>Are you ready to take your research up a notch? Watch our video to get an inside look at our cutting-edge web app for visualizing stroke research.</p>
+      <br>
+      <p>Currently unavailable, please check back soon!</p>
       <div class="video-container">
-        <!-- Replace the src with your video link or keep as a placeholder -->
-        <iframe src="https://www.youtube.com/embed/placeholderID" frameborder="0" allowfullscreen></iframe>
+        <!--placeholder-->
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/A1Xa_FCsDNk?si=O4GaN-cd9A5WW8qM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
-      <p>Welcome to the Brain Visualization App. Discover how our app can help you understand complex brain functions with interactive visualizations.</p>
+      <p>Welcome to the Stroke Cluster Visualization. Discover how our web app can help you enhance your stroke research with complex correlations in Dr. Rutvik Desai's patients through interactive visualizations. Our design features 2 atlases, 3 colorblind modes, and data visualized from over 500 MRIs. <br> <br>Most importantly, researchers can create an account and securely upload their own marked lesion data to display custom correlation visualizations.</p>
     </section>
 
-    <!-- Screenshots Section -->
+    <!-- screenshots section -->
     <section id="screenshots">
-      <h2>Screenshots</h2>
+      <h2>Screenshots & Demos</h2>
       <div class="screenshot-gallery">
-        <img src="screenshot1.jpg" alt="Screenshot 1 of the Brain Visualization App">
-        <img src="screenshot2.jpg" alt="Screenshot 2 of the Brain Visualization App">
-        <img src="screenshot3.jpg" alt="Screenshot 3 of the Brain Visualization App">
+        <figure class="screenshot-item">
+          <img src="./appShots/demo1.gif" alt="Region Selection Tool2">
+          <figcaption>Double click to select any Region of Interest (ROI) and instantly see its correlations with other regions of the brain.</figcaption>
+        </figure>
+        <figure class="screenshot-item">
+          <img src="./appShots/regionSelect.png" alt="Region Selection Tool">
+          <figcaption>View correlations and other ROIs in the sidebar, and export your findings to a .csv with ease.</figcaption>
+        </figure>
+        <figure class="screenshot-item">
+          <img src="./appShots/demo2.gif" alt="Region Selection Tool">
+          <figcaption>Use the slider at the bottom of the page to filter levels of correlation from -1 to 1.</figcaption>
+        </figure>
+        <figure class="screenshot-item">
+          <img src="./appShots/demo3.gif" alt="Region Selection Tool">
+          <figcaption>Toggle between accessible color modes and brain hemispheres with a simple click of a button.</figcaption>
+        </figure>
+        <figure class="screenshot-item">
+          <img src="./appShots/demo4.gif" alt="Region Selection Tool">
+          <figcaption>Explore regions recently searched, and navigate our collection of ROIs with our search capabilities.</figcaption>
+        </figure>
+        <figure class="screenshot-item">
+          <img src="./appShots/account.png" alt="Region Selection Tool">
+          <figcaption>Create an account to display your own custom findings. Always free - no strings attached.</figcaption>
+        </figure>
+        <figure class="screenshot-item">
+          <img src="./appShots/demo5.gif" alt="Region Selection Tool">
+          <figcaption>Upload files, delete files, make inferences through correlation calculations, and see them come to life.</figcaption>
+        </figure>
       </div>
     </section>
 
-    <!-- Additional Description Section -->
-    <section id="description">
-      <h2>How It Works</h2>
-      <p>Our app uses advanced visualization techniques to provide a unique perspective on brain activity. Explore data, see real-time updates, and get insights that can help users better understand the brain.</p>
+    <section id="hero">
+      <h1>Want to learn more?</h1>
+      <a href="https://strokecluster-visualization.onrender.com/" target="_blank">Visit Our Website Here</a>
     </section>
+    
   </main>
 
   <footer>
-    <p>&copy; 2025 Brain Visualization App. All rights reserved.</p>
+    <p>&copy; 2025 StrokeCluster Visualization. All rights reserved.</p>
   </footer>
+
+  <!-- BRAIN spawner -->
+  <script>
+    const SPAWN_DELAY       = 50;
+    const BUBBLES_PER_WAVE  = 1;
+    const ANIM_TIME         = 4000;
+    const SIZE_MIN          = 30;
+    const SIZE_MAX          = 80;
+    const SIDE_MARGIN       = 20;
+
+    let lastSpawn = 0;
+
+    /* spawn on scroll */
+    window.addEventListener('scroll', () => {
+      const now = Date.now();
+      if (now - lastSpawn < SPAWN_DELAY) return;
+      lastSpawn = now;
+      spawnWave();
+    });
+
+    function spawnWave() {
+      for (let i = 0; i < BUBBLES_PER_WAVE; i++) {
+        spawnBubble();
+      }
+    }
+
+    function spawnBubble() {
+      const size  = SIZE_MIN + Math.random() * (SIZE_MAX - SIZE_MIN);
+      const drift = (Math.random() - .5) * 80;
+      const xPos  = Math.random() * (innerWidth - size - 2 * SIDE_MARGIN) + SIDE_MARGIN;
+
+      const b = document.createElement('div');
+      b.className = 'brain-bubble';
+      b.style.setProperty('--size',  size  + 'px');
+      b.style.setProperty('--x',     xPos  + 'px');
+      b.style.setProperty('--drift', drift + 'px');
+
+      document.body.appendChild(b);
+      setTimeout(() => b.remove(), ANIM_TIME);
+    }
+  </script>
+
+  <!-- Single-pulse screenshot animation -->
+  <script>
+    const options = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    };
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        const el = entry.target;
+        if (entry.isIntersecting && !el.classList.contains('pulsed')) {
+          el.classList.add('in-view', 'pulsed');
+          obs.unobserve(el);
+        }
+      });
+    }, options);
+
+    document.querySelectorAll('.screenshot-item').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
 </body>
 </html>

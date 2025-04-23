@@ -1,38 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>About Us - Brain Visualization App</title>
-  <link rel="stylesheet" href="styles.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>About Us – StokeCluster Visualization</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- BRAIN ANIMATION -->
+  <style>
+    /* BRAIN rise */
+    @keyframes bubbleRise{
+      0%   {opacity:0;transform:translateX(var(--drift,0)) translateY(0)       scale(.7);}
+      15%  {opacity:1;}
+      100% {opacity:0;transform:translateX(var(--drift,0)) translateY(-110vh) scale(1);}
+    }
+
+    /* BRAIN sprite */
+    .brain-bubble{
+      position:fixed;
+      left:var(--x,0);
+      bottom:-120px;
+      width:var(--size,80px);
+      height:var(--size,80px);
+      background:
+          
+          url('./brain.png') center/contain no-repeat;
+      pointer-events:none;
+      animation:bubbleRise 4s cubic-bezier(.55,.05,.45,.95) forwards;
+      z-index:0;
+    }
+  </style>
 </head>
 <body>
   <header>
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="bubbleAttempt.html">Bubbles</a></li>
-        <li><a href="https://github.com/your-repo-url" target="_blank">GitHub Repo</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="https://github.com/SCCapstone/CostcoBOOMers.git" target="_blank">GitHub Repo</a></li>
+        <li><a href="https://strokecluster-visualization.onrender.com/" target="_blank">Live Website</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
     <section id="about">
+      <section id="hero">
       <h1>About Us</h1>
-      <p>We are a team dedicated to visualizing brain activity in an innovative and interactive way.</p>
-      <ul>
-        <li>Team Member 1 - <a href="https://www.linkedin.com/in/username1" target="_blank">LinkedIn</a></li>
-        <li>Team Member 2 - <a href="https://www.linkedin.com/in/username2" target="_blank">LinkedIn</a></li>
-        <li>Team Member 3 - <a href="https://www.linkedin.com/in/username3" target="_blank">LinkedIn</a></li>
-        <!-- Add additional team members as needed -->
-      </ul>
+      <p style="text-align:center; max-width:900px; margin:0 auto 3rem;">
+        We’re a team of University of South Carolina computing students dedicated to visualizing brain activity in an innovative and interactive way. Connect with us below!
+      </p>
+      </section>
+
+      <div class="team-container">
+        <div class="team-member">
+          <img src="./teamPictures/evie.png" alt="Evelyn Ellis">
+          <div class="member-info">
+            <h3>Evelyn Ellis</h3>
+            <a href="https://www.linkedin.com/in/evie-ellis" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+
+        <div class="team-member">
+          <img src="./teamPictures/gavin.png" alt="Gavin Hewitt">
+          <div class="member-info">
+            <h3>Gavin Hewitt</h3>
+            <a href="https://www.linkedin.com/in/gavin-hewitt03/" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+
+        <div class="team-member">
+          <img src="./teamPictures/jacob.png" alt="Jacob Schatzle">
+          <div class="member-info">
+            <h3>Jacob Schatzle</h3>
+            <a href="https://www.linkedin.com/in/jacob-schatzle/" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+
+        <div class="team-member">
+          <img src="./teamPictures/tag.png" alt="Tag McVey">
+          <div class="member-info">
+            <h3>Tag McVey</h3>
+            <a href="https://www.linkedin.com/in/tagmcvey/" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+
+        <div class="team-member">
+          <img src="./teamPictures/tessa.png" alt="Tessa Neale">
+          <div class="member-info">
+            <h3>Tessa Neale</h3>
+            <a href="https://www.linkedin.com/in/tessa-neal-975617251/" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+      </div>
     </section>
+    <section id="about">
+      <section id="hero">
+      <h1>About Desai Lab</h1>
+      <p style="text-align:center; max-width:900px; margin:0 auto 3rem;">
+        We investigate brain bases of language and especially meaning or semantics. We study how concepts are represented and processed in the brain. One of the questions that is a current focus of research is: Is the conceptual (thinking) system of the brain completely separate from the perception-action (seeing, hearing, acting) systems of the brain? We can further ask questions such as: To what extent does language about time and space use neural resources used for perceiving time and space? What is the effect of pathology of the sensory-motor systems on conceptual processing?
+      </p>
+      </section>
+      <div class="team-container">
+        <div class="team-member">
+          <img src="./teamPictures/desai.png" alt="Dr. Rutvik Desai">
+          <div class="member-info">
+            <h3>Dr. Rutvik Desai</h3>
+            <a href="https://sc.edu/study/colleges_schools/artsandsciences/psychology/our_people/directory/desai_rutvik.php" target="_blank">Link to Faculty Page</a>
+            <br>
+            <a href="https://sc.edu/study/colleges_schools/artsandsciences/psychology/research_clinical_facilities/labs/desai_lab/index.php" target="_blank">Link to Lab Website</a>
+          </div>
+        </div>
+      </div>
   </main>
 
   <footer>
-    <p>&copy; 2025 Brain Visualization App. All rights reserved.</p>
+    <p>&copy; 2025 StrokeCluster Visualization. All rights reserved.</p>
   </footer>
+
+  <!-- BRAIN spawner -->
+  <script>
+    const SPAWN_DELAY       = 50;
+    const BUBBLES_PER_WAVE  = 1;
+    const ANIM_TIME         = 4000;
+    const SIZE_MIN          = 60;
+    const SIZE_MAX          = 100;
+    const SIDE_MARGIN       = 40;
+
+    let lastSpawn = 0;
+
+    /* spawn on scroll*/
+    window.addEventListener('scroll', () => {
+      const now = Date.now();
+      if (now - lastSpawn < SPAWN_DELAY) return;
+      lastSpawn = now;
+      spawnWave();
+    });
+
+    function spawnWave(){
+      for(let i=0; i<BUBBLES_PER_WAVE; i++) spawnBubble();
+    }
+
+    function spawnBubble(){
+      const size  = SIZE_MIN + Math.random() * (SIZE_MAX - SIZE_MIN);
+      const drift = (Math.random() - .5) * 80;
+      const xPos  = Math.random() * (innerWidth - size - 2*SIDE_MARGIN) + SIDE_MARGIN;
+
+      const b = document.createElement('div');
+      b.className = 'brain-bubble';
+      b.style.setProperty('--size',  size  + 'px');
+      b.style.setProperty('--x',     xPos  + 'px');
+      b.style.setProperty('--drift', drift + 'px');
+
+      document.body.appendChild(b);
+      setTimeout(() => b.remove(), ANIM_TIME);
+    }
+  </script>
 </body>
 </html>
